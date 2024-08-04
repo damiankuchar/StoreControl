@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using StoreControl.Application.Interfaces;
+using StoreControl.Domain.Exceptions;
 
 namespace StoreControl.Application.Features.PermissionFeatures.Queries.GetPermissionById
 {
@@ -28,7 +29,7 @@ namespace StoreControl.Application.Features.PermissionFeatures.Queries.GetPermis
 
                 if (permission == null)
                 {
-                    throw new DirectoryNotFoundException("Permission not found.");
+                    throw new NotFoundException("Permission not found.");
                 }
 
                 return _mapper.Map<GetPermissionByIdResponse>(permission);

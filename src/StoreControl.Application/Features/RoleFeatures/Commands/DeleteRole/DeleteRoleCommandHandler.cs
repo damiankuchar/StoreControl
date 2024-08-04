@@ -3,37 +3,37 @@ using Microsoft.EntityFrameworkCore;
 using StoreControl.Application.Interfaces;
 using StoreControl.Domain.Exceptions;
 
-namespace StoreControl.Application.Features.PermissionFeatures.Commands.DeletePermission
+namespace StoreControl.Application.Features.RoleFeatures.Commands.DeleteRole
 {
-    public class DeletePermissionCommandHandler : IRequestHandler<DeletePermissionCommand, Unit>
+    public class DeleteRoleCommandHandler : IRequestHandler<DeleteRoleCommand, Unit>
     {
         private readonly IApplicationDbContext _dbContext;
 
-        public DeletePermissionCommandHandler(IApplicationDbContext dbContext)
+        public DeleteRoleCommandHandler(IApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<Unit> Handle(DeletePermissionCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
         {
             using var transaction = await _dbContext.BeginTransactionAsync(cancellationToken);
 
             try
             {
-                var permission = await _dbContext.Permissions
+                var role = await _dbContext.Roles
                     .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-                if (permission == null)
+                if (role == null)
                 {
-                    throw new NotFoundException("Permission do not exist.");
+                    throw new NotFoundException("Role do not exist.");
                 }
 
-                _dbContext.Permissions.Remove(permission);
+                _dbContext.Roles.Remove(role);
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
                 await transaction.CommitAsync(cancellationToken);
 
-                return Unit.Value;
+                return  Unit.Value;
             }
             catch (Exception)
             {
