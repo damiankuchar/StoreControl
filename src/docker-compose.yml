@@ -1,15 +1,6 @@
 version: '3.4'
 
 services:
-  storecontrol.webapi:
-    image: ${DOCKER_REGISTRY-}storecontrolwebapi
-    container_name: storecontrol.webapi
-    build:
-      context: .
-      dockerfile: StoreControl.WebAPI/Dockerfile
-    environment:
-      - ConnectionStrings__DefaultConnection=Host=storecontrol.database;Port=5432;Database=StoreControl;Username=postgres;Password=postgres;Include Error Detail=true 
-
   storecontrol.database:
     image: postgres:latest
     container_name: storecontrol.database
