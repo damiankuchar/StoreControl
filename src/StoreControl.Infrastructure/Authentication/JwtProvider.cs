@@ -33,8 +33,10 @@ namespace StoreControl.Infrastructure.Authentication
         {
             var claims = new List<Claim>
             {
-                new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new(JwtRegisteredClaimNames.Email, user.Email),
+                new(CustomClaims.UserId, user.Id.ToString()),
+                new(CustomClaims.FirstName, user.FirstName),
+                new(CustomClaims.LastName, user.LastName),
                 new(CustomClaims.FullName, $"{user.FirstName} {user.LastName}"),
             };
 
