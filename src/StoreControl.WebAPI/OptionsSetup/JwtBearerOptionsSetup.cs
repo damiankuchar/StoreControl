@@ -29,6 +29,7 @@ namespace StoreControl.WebAPI.OptionsSetup
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = _jwtOptions.Issuer,
                 ValidAudience = _jwtOptions.Audience,
+                ClockSkew = TimeSpan.FromSeconds(_jwtOptions.ClockSkew),
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),
             };
@@ -47,6 +48,7 @@ namespace StoreControl.WebAPI.OptionsSetup
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = _jwtOptions.Issuer,
                 ValidAudience = _jwtOptions.Audience,
+                ClockSkew = TimeSpan.FromMinutes(_jwtOptions.ClockSkew),
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),
             };

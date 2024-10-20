@@ -38,14 +38,11 @@ namespace StoreControl.Application.Features.AuthFeatures.Commands.Refresh
 
                 if (user == null || user.RefreshToken != request.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
                 {
-                    throw new BadRequestException("Invalid client request.");
+                    throw new BadRequestException("Refresh token is not valid.");
                 }
 
                 var token = await _jwtProvider.GenerateAccessTokenAsync(user, cancellationToken);
-                var refreshToken = _jwtProvider.GenerateRefreshToken();
-
-                user.RefreshToken = refreshToken;
-                user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+                var refreshToken = await _jwtProvider.GenerateAndSaveRefreshTokenAsync(user, cancellationToken);
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);

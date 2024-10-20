@@ -12,18 +12,27 @@ namespace StoreControl.Infrastructure.Authentication
             _dbContext = dbContext;
         }
 
-        public async Task<HashSet<string>> GetPermissionAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<List<string>> GetPermissionAsync(Guid userId, CancellationToken cancellationToken)
         {
             var roles = await _dbContext.Users
                 .Where(x => x.Id == userId)
                 .Select(x => x.Roles)
-                .ToArrayAsync(cancellationToken);
+                .ToListAsync(cancellationToken);
 
             return roles
                 .SelectMany(x => x)
                 .SelectMany(x => x.Permissions)
                 .Select(x => x.Name)
-                .ToHashSet();
+                .ToList();
+        }
+
+        public async Task<List<string>> GetRoleAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            return await _dbContext.Users
+                .Where(x => x.Id == userId)
+                .SelectMany(x => x.Roles)
+                .Select(x => x.Name)
+                .ToListAsync(cancellationToken);
         }
     }
 }

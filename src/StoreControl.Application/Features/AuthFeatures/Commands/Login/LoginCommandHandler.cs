@@ -45,10 +45,7 @@ namespace StoreControl.Application.Features.AuthFeatures.Commands.Login
                 }
 
                 var token = await _jwtProvider.GenerateAccessTokenAsync(user, cancellationToken);
-                var refreshToken = _jwtProvider.GenerateRefreshToken();
-
-                user.RefreshToken = refreshToken;
-                user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+                var refreshToken = await _jwtProvider.GenerateAndSaveRefreshTokenAsync(user, cancellationToken);
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);

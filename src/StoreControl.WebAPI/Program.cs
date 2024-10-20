@@ -19,6 +19,8 @@ builder.Services.AddApiServices();
 
 var app = builder.Build();
 
+app.UseCors("CorsPolicy");
+
 app.UseExceptionHandler();
 
 if (!app.Environment.IsProduction())

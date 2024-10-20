@@ -5,6 +5,6 @@ namespace StoreControl.Application.Interfaces
     public interface IJwtProvider
     {
         Task<string> GenerateAccessTokenAsync(User user, CancellationToken cancellationToken);
-        string GenerateRefreshToken();
+        Task<string> GenerateAndSaveRefreshTokenAsync(User user, CancellationToken cancellationToken);
     }
 }

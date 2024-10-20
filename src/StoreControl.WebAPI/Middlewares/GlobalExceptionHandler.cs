@@ -17,7 +17,12 @@ namespace StoreControl.WebAPI.Middlewares
             httpContext.Response.ContentType = MediaTypeNames.Application.Json;
             httpContext.Response.StatusCode = (int)errorResponse.StatusCode;
 
-            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(errorResponse), cancellationToken);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(errorResponse, options), cancellationToken);
 
             return true;
         }

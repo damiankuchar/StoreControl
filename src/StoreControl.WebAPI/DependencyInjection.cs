@@ -11,6 +11,7 @@ namespace StoreControl.WebAPI
         {
             services.ConfigureOptionsInjection();
             services.ConfigureExceptionHandling();
+            services.ConfigureCorsPolicy();
             services.ConfigureSwaggerInjection();
 
             return services;
@@ -28,6 +29,23 @@ namespace StoreControl.WebAPI
         {
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
+
+            return services;
+        }
+
+        private static IServiceCollection ConfigureCorsPolicy(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .SetIsOriginAllowed(_ => true);
+                });
+            });
 
             return services;
         }
