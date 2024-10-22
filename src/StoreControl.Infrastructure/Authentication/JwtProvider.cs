@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StoreControl.Application.Interfaces;
+using StoreControl.Domain.Constants;
 using StoreControl.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,18 +15,12 @@ namespace StoreControl.Infrastructure.Authentication
         private readonly IApplicationDbContext _dbContext;
         private readonly JwtOptions _jwtOptions;
         private readonly IPermissionService _permissionService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public JwtProvider(
-            IApplicationDbContext dbContext,
-            IOptions<JwtOptions> jwtOptions,
-            IPermissionService permissionService,
-            IHttpContextAccessor httpContextAccessor)
+        public JwtProvider(IApplicationDbContext dbContext, IOptions<JwtOptions> jwtOptions, IPermissionService permissionService)
         {
             _dbContext = dbContext;
             _jwtOptions = jwtOptions.Value;
             _permissionService = permissionService;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<string> GenerateAccessTokenAsync(User user, CancellationToken cancellationToken)
@@ -86,7 +80,7 @@ namespace StoreControl.Infrastructure.Authentication
             return refreshToken;
         }
 
-        private string GenerateRefreshToken()
+        private static string GenerateRefreshToken()
         {
             var randomNumber = new byte[64];
             using var rng = RandomNumberGenerator.Create();

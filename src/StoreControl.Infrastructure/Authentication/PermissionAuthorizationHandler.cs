@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using StoreControl.Domain.Constants;
 
 namespace StoreControl.Infrastructure.Authentication
 {

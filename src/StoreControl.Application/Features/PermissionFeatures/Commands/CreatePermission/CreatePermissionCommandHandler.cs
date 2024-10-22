@@ -7,7 +7,7 @@ using StoreControl.Domain.Exceptions;
 
 namespace StoreControl.Application.Features.PermissionFeatures.Commands.CreatePermission
 {
-    public class CreatePermissionCommandHandler : IRequestHandler<CreatePermissionCommand, Guid>
+    public class CreatePermissionCommandHandler : IRequestHandler<CreatePermissionCommand, PermissionDto>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -18,7 +18,7 @@ namespace StoreControl.Application.Features.PermissionFeatures.Commands.CreatePe
             _mapper = mapper;
         }
 
-        public async Task<Guid> Handle(CreatePermissionCommand request, CancellationToken cancellationToken)
+        public async Task<PermissionDto> Handle(CreatePermissionCommand request, CancellationToken cancellationToken)
         {
             using var transaction = await _dbContext.BeginTransactionAsync(cancellationToken);
 
@@ -33,7 +33,7 @@ namespace StoreControl.Application.Features.PermissionFeatures.Commands.CreatePe
 
                 await transaction.CommitAsync(cancellationToken);
 
-                return permission.Id;
+                return _mapper.Map<PermissionDto>(permission);
             }
             catch (Exception)
             {

@@ -7,7 +7,7 @@ using StoreControl.Domain.Exceptions;
 
 namespace StoreControl.Application.Features.AuthFeatures.Commands.Login
 {
-    public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
+    public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDto>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IPasswordHasher<User> _passwordHasher;
@@ -23,7 +23,7 @@ namespace StoreControl.Application.Features.AuthFeatures.Commands.Login
             _jwtProvider = jwtProvider;
         }
 
-        public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<AuthResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             using var transaction = await _dbContext.BeginTransactionAsync(cancellationToken);
             
@@ -50,7 +50,7 @@ namespace StoreControl.Application.Features.AuthFeatures.Commands.Login
                 await _dbContext.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
 
-                return new LoginResponse
+                return new AuthResponseDto
                 {
                     Token = token,
                     RefreshToken = refreshToken,

@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using StoreControl.Application.Interfaces;
 using StoreControl.Domain.Common;
+using StoreControl.Domain.Constants;
 using StoreControl.Domain.Entities;
-using StoreControl.Infrastructure.Authentication;
 
 namespace StoreControl.Infrastructure.Persistence
 {

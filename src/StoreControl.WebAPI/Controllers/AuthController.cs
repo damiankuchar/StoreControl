@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using StoreControl.Application.Features.AuthFeatures;
 using StoreControl.Application.Features.AuthFeatures.Commands.Login;
 using StoreControl.Application.Features.AuthFeatures.Commands.Refresh;
 using StoreControl.Application.Features.AuthFeatures.Commands.Register;
@@ -15,7 +16,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpPost("register")]
-        [ProducesResponseType(typeof(RegisterResponse), 200)]
+        [ProducesResponseType(typeof(AuthResponseDto), 200)]
         public async Task<IActionResult> Register([FromBody] RegisterCommand command, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(command, cancellationToken);
@@ -24,7 +25,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpPost("login")]
-        [ProducesResponseType(typeof(LoginResponse), 200)]
+        [ProducesResponseType(typeof(AuthResponseDto), 200)]
         public async Task<IActionResult> Login([FromBody] LoginCommand command, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(command, cancellationToken);
@@ -33,7 +34,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpPost("refresh")]
-        [ProducesResponseType(typeof(RefreshResponse), 200)]
+        [ProducesResponseType(typeof(AuthResponseDto), 200)]
         public async Task<IActionResult> Refresh([FromBody] RefreshCommand command, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(command, cancellationToken);

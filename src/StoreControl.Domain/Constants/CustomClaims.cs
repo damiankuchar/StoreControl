@@ -1,4 +1,4 @@
-﻿namespace StoreControl.Infrastructure.Authentication
+﻿namespace StoreControl.Domain.Constants
 {
     public static class CustomClaims
     {

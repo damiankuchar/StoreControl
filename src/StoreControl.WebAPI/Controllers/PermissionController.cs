@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using StoreControl.Application.Features.PermissionFeatures;
 using StoreControl.Application.Features.PermissionFeatures.Commands.CreatePermission;
 using StoreControl.Application.Features.PermissionFeatures.Commands.DeletePermission;
 using StoreControl.Application.Features.PermissionFeatures.Commands.UpdatePermission;
@@ -17,6 +18,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<PermissionDto>), 200)]
         public async Task<IActionResult> GetAllPermisions(CancellationToken cancellationToken)
         {
             var model = new GetAllPermisionsQuery();
@@ -27,6 +29,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(PermissionDto), 200)]
         public async Task<IActionResult> GetPermissionById(Guid id, CancellationToken cancellationToken)
         {
             var model = new GetPermissionByIdQuery { Id = id };
@@ -37,24 +40,27 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(PermissionDto), 201)]
         public async Task<IActionResult> CreatePermission([FromBody] CreatePermissionCommand command, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(command, cancellationToken);
 
-            return CreatedAtAction(nameof(GetPermissionById), new { id = response }, null);
+            return CreatedAtAction(nameof(GetPermissionById), new { id = response.Id }, response);
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(PermissionDto), 200)]
         public async Task<IActionResult> UpdatePermission(Guid id, [FromBody] UpdatePermissionCommand command, CancellationToken cancellationToken)
         {
             command.Id = id;
 
-            await _mediator.Send(command, cancellationToken);
+            var response = await _mediator.Send(command, cancellationToken);
 
-            return NoContent();
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
         public async Task<IActionResult> DeletePermission(Guid id, CancellationToken cancellationToken)
         {
             var command = new DeletePermissionCommand { Id = id };

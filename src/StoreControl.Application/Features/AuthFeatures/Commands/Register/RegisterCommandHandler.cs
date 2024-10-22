@@ -8,7 +8,7 @@ using StoreControl.Domain.Exceptions;
 
 namespace StoreControl.Application.Features.AuthFeatures.Commands.Register
 {
-    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterResponse>
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthResponseDto>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -27,7 +27,7 @@ namespace StoreControl.Application.Features.AuthFeatures.Commands.Register
             _jwtProvider = jwtProvider;
         }
 
-        public async Task<RegisterResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
+        public async Task<AuthResponseDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
             using var transaction = await _dbContext.BeginTransactionAsync(cancellationToken);
 
@@ -48,7 +48,7 @@ namespace StoreControl.Application.Features.AuthFeatures.Commands.Register
                 await _dbContext.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
 
-                return new RegisterResponse
+                return new AuthResponseDto
                 {
                     Token = token,
                     RefreshToken = refreshToken

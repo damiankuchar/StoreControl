@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace StoreControl.Application.Features.PermissionFeatures.Commands.UpdatePermission
 {
-    public class UpdatePermissionCommand : IRequest<Unit>
+    public class UpdatePermissionCommand : IRequest<PermissionDto>
     {
         [JsonIgnore]
         public Guid Id { get; set; }

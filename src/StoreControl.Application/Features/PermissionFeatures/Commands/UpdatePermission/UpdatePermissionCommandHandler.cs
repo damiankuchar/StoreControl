@@ -6,7 +6,7 @@ using StoreControl.Domain.Exceptions;
 
 namespace StoreControl.Application.Features.PermissionFeatures.Commands.UpdatePermission
 {
-    public class UpdatePermissionCommandHandler : IRequestHandler<UpdatePermissionCommand, Unit>
+    public class UpdatePermissionCommandHandler : IRequestHandler<UpdatePermissionCommand, PermissionDto>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ namespace StoreControl.Application.Features.PermissionFeatures.Commands.UpdatePe
             _mapper = mapper;
         }
 
-        public async Task<Unit> Handle(UpdatePermissionCommand request, CancellationToken cancellationToken)
+        public async Task<PermissionDto> Handle(UpdatePermissionCommand request, CancellationToken cancellationToken)
         {
             using var transaction = await _dbContext.BeginTransactionAsync(cancellationToken);
 
@@ -37,7 +37,7 @@ namespace StoreControl.Application.Features.PermissionFeatures.Commands.UpdatePe
 
                 await transaction.CommitAsync(cancellationToken);
 
-                return Unit.Value;
+                return _mapper.Map<PermissionDto>(permission);
             }
             catch (Exception)
             {

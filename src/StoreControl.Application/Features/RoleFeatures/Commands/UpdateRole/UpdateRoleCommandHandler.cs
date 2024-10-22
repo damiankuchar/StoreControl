@@ -6,7 +6,7 @@ using StoreControl.Domain.Exceptions;
 
 namespace StoreControl.Application.Features.RoleFeatures.Commands.UpdateRole
 {
-    public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Unit>
+    public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, RoleDetailedDto>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ namespace StoreControl.Application.Features.RoleFeatures.Commands.UpdateRole
             _mapper = mapper;
         }
 
-        public async Task<Unit> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
+        public async Task<RoleDetailedDto> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
         {
             using var transaction = await _dbContext.BeginTransactionAsync(cancellationToken);
 
@@ -44,7 +44,7 @@ namespace StoreControl.Application.Features.RoleFeatures.Commands.UpdateRole
 
                 await transaction.CommitAsync(cancellationToken);
 
-                return Unit.Value;
+                return _mapper.Map<RoleDetailedDto>(role);
             }
             catch (Exception)
             {

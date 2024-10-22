@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace StoreControl.Application.Features.RoleFeatures.Commands.UpdateRole
 {
-    public class UpdateRoleCommand : IRequest<Unit>
+    public class UpdateRoleCommand : IRequest<RoleDetailedDto>
     {
         [JsonIgnore]
         public Guid Id { get; set; }

@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using StoreControl.Application.Interfaces;
+using StoreControl.Domain.Constants;
 using StoreControl.Domain.Exceptions;
-using System.Security.Claims;
 
 namespace StoreControl.Application.Features.AuthFeatures.Commands.Refresh
 {
-    public class RefreshCommandHandler : IRequestHandler<RefreshCommand, RefreshResponse>
+    public class RefreshCommandHandler : IRequestHandler<RefreshCommand, AuthResponseDto>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IJwtProvider _jwtProvider;
@@ -19,14 +19,14 @@ namespace StoreControl.Application.Features.AuthFeatures.Commands.Refresh
             _userClaimsService = userClaimsService;
         }
 
-        public async Task<RefreshResponse> Handle(RefreshCommand request, CancellationToken cancellationToken)
+        public async Task<AuthResponseDto> Handle(RefreshCommand request, CancellationToken cancellationToken)
         {
             using var transaction = await _dbContext.BeginTransactionAsync(cancellationToken);
 
             try
             {
                 var claims = _userClaimsService.GetClaimsFromExpiredToken(request.Token);
-                claims.TryGetValue(ClaimTypes.NameIdentifier, out var subClaimValue);
+                claims.TryGetValue(CustomClaims.UserId, out var subClaimValue);
 
                 if (!Guid.TryParse(subClaimValue, out Guid userId))
                 {
@@ -47,7 +47,7 @@ namespace StoreControl.Application.Features.AuthFeatures.Commands.Refresh
                 await _dbContext.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
 
-                return new RefreshResponse
+                return new AuthResponseDto
                 {
                     Token = token,
                     RefreshToken = refreshToken

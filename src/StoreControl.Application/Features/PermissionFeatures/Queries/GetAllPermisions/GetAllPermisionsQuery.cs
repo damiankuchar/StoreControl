@@ -2,7 +2,7 @@
 
 namespace StoreControl.Application.Features.PermissionFeatures.Queries.GetAllPermisions
 {
-    public class GetAllPermisionsQuery : IRequest<IEnumerable<GetAllPermisionsResponse>>
+    public class GetAllPermisionsQuery : IRequest<IEnumerable<PermissionDto>>
     {
     }
 }

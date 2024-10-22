@@ -5,7 +5,7 @@ using StoreControl.Application.Interfaces;
 
 namespace StoreControl.Application.Features.RoleFeatures.Queries.GetAllRoles
 {
-    public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, IEnumerable<GetAllRolesResponse>>
+    public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, IEnumerable<RoleDto>>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -16,23 +16,13 @@ namespace StoreControl.Application.Features.RoleFeatures.Queries.GetAllRoles
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetAllRolesResponse>> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RoleDto>> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
         {
-            using var transaction = await _dbContext.BeginTransactionAsync(cancellationToken);
+            var roles = await _dbContext.Roles
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
 
-            try
-            {
-                var roles = await _dbContext.Roles
-                    .AsNoTracking()
-                    .ToListAsync(cancellationToken);
-
-                return _mapper.Map<IEnumerable<GetAllRolesResponse>>(roles);
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync(cancellationToken);
-                throw;
-            }
+            return _mapper.Map<IEnumerable<RoleDto>>(roles);
         }
     }
 }

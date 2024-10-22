@@ -7,7 +7,7 @@ using StoreControl.Domain.Exceptions;
 
 namespace StoreControl.Application.Features.RoleFeatures.Commands.CreateRole
 {
-    public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Guid>
+    public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, RoleDetailedDto>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -18,7 +18,7 @@ namespace StoreControl.Application.Features.RoleFeatures.Commands.CreateRole
             _mapper = mapper;
         }
 
-        public async Task<Guid> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
+        public async Task<RoleDetailedDto> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
         {
             using var transaction = await _dbContext.BeginTransactionAsync(cancellationToken);
 
@@ -39,7 +39,7 @@ namespace StoreControl.Application.Features.RoleFeatures.Commands.CreateRole
 
                 await transaction.CommitAsync(cancellationToken);
 
-                return role.Id;
+                return _mapper.Map<RoleDetailedDto>(role);
             }
             catch (Exception)
             {

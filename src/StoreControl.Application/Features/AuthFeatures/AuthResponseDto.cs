@@ -1,6 +1,6 @@
-﻿namespace StoreControl.Application.Features.AuthFeatures.Commands.Refresh
+﻿namespace StoreControl.Application.Features.AuthFeatures
 {
-    public class RefreshResponse
+    public class AuthResponseDto
     {
         public string Token { get; set; } = string.Empty;
         public string RefreshToken { get; set; } = string.Empty;

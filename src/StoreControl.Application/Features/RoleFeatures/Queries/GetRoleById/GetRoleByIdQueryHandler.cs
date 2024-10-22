@@ -6,7 +6,7 @@ using StoreControl.Domain.Exceptions;
 
 namespace StoreControl.Application.Features.RoleFeatures.Queries.GetRoleById
 {
-    public class GetRoleByIdQueryHandler : IRequestHandler<GetRoleByIdQuery, GetRoleByIdResponse>
+    public class GetRoleByIdQueryHandler : IRequestHandler<GetRoleByIdQuery, RoleDetailedDto>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -17,28 +17,18 @@ namespace StoreControl.Application.Features.RoleFeatures.Queries.GetRoleById
             _mapper = mapper;
         }
 
-        public async Task<GetRoleByIdResponse> Handle(GetRoleByIdQuery request, CancellationToken cancellationToken)
+        public async Task<RoleDetailedDto> Handle(GetRoleByIdQuery request, CancellationToken cancellationToken)
         {
-            using var transaction = await _dbContext.BeginTransactionAsync(cancellationToken);
+            var role = await _dbContext.Roles
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == request.Id);
 
-            try
+            if (role == null)
             {
-                var role = await _dbContext.Roles
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(x => x.Id == request.Id);
-
-                if (role == null)
-                {
-                    throw new NotFoundException("Role not found.");
-                }
-
-                return _mapper.Map<GetRoleByIdResponse>(role);
+                throw new NotFoundException("Role not found.");
             }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync(cancellationToken);
-                throw;
-            }
+
+            return _mapper.Map<RoleDetailedDto>(role);
         }
     }
 }
