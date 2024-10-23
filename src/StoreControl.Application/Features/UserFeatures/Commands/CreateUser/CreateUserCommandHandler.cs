@@ -6,28 +6,22 @@ using StoreControl.Application.Interfaces;
 using StoreControl.Domain.Entities;
 using StoreControl.Domain.Exceptions;
 
-namespace StoreControl.Application.Features.AuthFeatures.Commands.Register
+namespace StoreControl.Application.Features.UserFeatures.Commands.CreateUser
 {
-    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthResponseDto>
+    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDetailedDto>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IPasswordHasher<User> _passwordHasher;
-        private readonly IJwtProvider _jwtProvider;
 
-        public RegisterCommandHandler(
-            IApplicationDbContext dbContext,
-            IMapper mapper,
-            IPasswordHasher<User> passwordHasher,
-            IJwtProvider jwtProvider)
+        public CreateUserCommandHandler(IApplicationDbContext dbContext, IMapper mapper, IPasswordHasher<User> passwordHasher)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _passwordHasher = passwordHasher;
-            _jwtProvider = jwtProvider;
         }
 
-        public async Task<AuthResponseDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
+        public async Task<UserDetailedDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             using var transaction = await _dbContext.BeginTransactionAsync(cancellationToken);
 
@@ -37,21 +31,19 @@ namespace StoreControl.Application.Features.AuthFeatures.Commands.Register
 
                 await IsUserUnique(user, cancellationToken);
 
+                var roles = await _dbContext.Roles
+                    .Where(x => request.RoleIds.Contains(x.Id))
+                    .ToListAsync(cancellationToken);
+
+                user.Roles = roles;
                 user.Password = _passwordHasher.HashPassword(user, request.Password);
 
                 await _dbContext.Users.AddAsync(user, cancellationToken);
-
-                var token = await _jwtProvider.GenerateAccessTokenAsync(user, cancellationToken);
-                var refreshToken = await _jwtProvider.GenerateAndSaveRefreshTokenAsync(user, cancellationToken);
-
                 await _dbContext.SaveChangesAsync(cancellationToken);
+
                 await transaction.CommitAsync(cancellationToken);
 
-                return new AuthResponseDto
-                {
-                    Token = token,
-                    RefreshToken = refreshToken
-                };
+                return _mapper.Map<UserDetailedDto>(user);
             }
             catch (Exception)
             {
