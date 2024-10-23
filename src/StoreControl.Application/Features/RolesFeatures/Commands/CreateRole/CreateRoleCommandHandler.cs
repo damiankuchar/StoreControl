@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using StoreControl.Application.Interfaces;
+using StoreControl.Application.Shared.Services.RoleService;
 using StoreControl.Domain.Entities;
 using StoreControl.Domain.Exceptions;
 
@@ -11,11 +12,13 @@ namespace StoreControl.Application.Features.RolesFeatures.Commands.CreateRole
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IRoleService _roleService;
 
-        public CreateRoleCommandHandler(IApplicationDbContext dbContext, IMapper mapper)
+        public CreateRoleCommandHandler(IApplicationDbContext dbContext, IMapper mapper, IRoleService roleService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _roleService = roleService;
         }
 
         public async Task<RoleDetailedDto> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
@@ -24,9 +27,14 @@ namespace StoreControl.Application.Features.RolesFeatures.Commands.CreateRole
 
             try
             {
-                await IsRoleUnique(request.Name, cancellationToken);
-
                 var role = _mapper.Map<Role>(request);
+
+                var isRoleUnique = await _roleService.IsRoleUniqueAsync(role, cancellationToken);
+
+                if (!isRoleUnique)
+                {
+                    throw new BadRequestException("Role with provided name already exists.");
+                }
 
                 var permissions = await _dbContext.Permissions
                     .Where(x => request.PermissionIds.Contains(x.Id))
@@ -45,17 +53,6 @@ namespace StoreControl.Application.Features.RolesFeatures.Commands.CreateRole
             {
                 await transaction.RollbackAsync(cancellationToken);
                 throw;
-            }
-        }
-
-        private async Task IsRoleUnique(string roleName, CancellationToken cancellationToken)
-        {
-            var roleAlreadyExists = await _dbContext.Roles
-                .AnyAsync(x => x.Name == roleName, cancellationToken);
-
-            if (roleAlreadyExists)
-            {
-                throw new BadRequestException("Role with provided name already exists.");
             }
         }
     }

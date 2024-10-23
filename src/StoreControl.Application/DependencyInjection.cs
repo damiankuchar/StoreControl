@@ -2,6 +2,9 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using StoreControl.Application.Behaviours;
+using StoreControl.Application.Shared.Services.PermissionService;
+using StoreControl.Application.Shared.Services.RoleService;
+using StoreControl.Application.Shared.Services.UserService;
 using System.Reflection;
 
 namespace StoreControl.Application
@@ -15,6 +18,17 @@ namespace StoreControl.Application
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+            services.AddServices();
+
+            return services;
+        }
+
+        private static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IPermissionService, PermissionService>();
 
             return services;
         }

@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using StoreControl.Application.Interfaces;
+using StoreControl.Application.Shared.Services.RoleService;
 using StoreControl.Domain.Exceptions;
 
 namespace StoreControl.Application.Features.RolesFeatures.Commands.UpdateRole
@@ -10,11 +11,13 @@ namespace StoreControl.Application.Features.RolesFeatures.Commands.UpdateRole
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IRoleService _roleService;
 
-        public UpdateRoleCommandHandler(IApplicationDbContext dbContext, IMapper mapper)
+        public UpdateRoleCommandHandler(IApplicationDbContext dbContext, IMapper mapper, IRoleService roleService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _roleService = roleService;
         }
 
         public async Task<RoleDetailedDto> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
@@ -32,6 +35,13 @@ namespace StoreControl.Application.Features.RolesFeatures.Commands.UpdateRole
                 }
 
                 _mapper.Map(request, role);
+
+                var isRoleUnique = await _roleService.IsRoleUniqueAsync(role, cancellationToken);
+
+                if (!isRoleUnique)
+                {
+                    throw new BadRequestException("Role with provided name already exists.");
+                }
 
                 var permissions = await _dbContext.Permissions
                     .Where(x => request.PermissionIds.Contains(x.Id))

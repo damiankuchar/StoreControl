@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using StoreControl.Application.Interfaces;
+using StoreControl.Application.Shared.Services.PermissionService;
 using StoreControl.Domain.Exceptions;
 
 namespace StoreControl.Application.Features.PermissionsFeatures.Commands.UpdatePermission
@@ -10,11 +11,13 @@ namespace StoreControl.Application.Features.PermissionsFeatures.Commands.UpdateP
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IPermissionService _permissionService;
 
-        public UpdatePermissionCommandHandler(IApplicationDbContext dbContext, IMapper mapper)
+        public UpdatePermissionCommandHandler(IApplicationDbContext dbContext, IMapper mapper, IPermissionService permissionService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _permissionService = permissionService;
         }
 
         public async Task<PermissionDto> Handle(UpdatePermissionCommand request, CancellationToken cancellationToken)
@@ -32,6 +35,13 @@ namespace StoreControl.Application.Features.PermissionsFeatures.Commands.UpdateP
                 }
 
                 _mapper.Map(request, permission);
+
+                var isPermissionUnique = await _permissionService.IsPermissionUniqueAsync(permission, cancellationToken);
+
+                if (!isPermissionUnique)
+                {
+                    throw new BadRequestException("Permission with provided name already exists.");
+                }
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
