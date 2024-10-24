@@ -26,6 +26,14 @@ namespace StoreControl.Application.IntegrationTests.Abstractions
 
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseNpgsql(_dbContainer.GetConnectionString()));
+
+                var serviceProvider = services.BuildServiceProvider();
+              
+                using var scope = serviceProvider.CreateScope();
+
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                dbContext.Database.Migrate();
             });
         }
 

@@ -1,8 +1,6 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using StoreControl.Application.Interfaces;
-using StoreControl.Infrastructure.Persistence;
 
 namespace StoreControl.Application.IntegrationTests.Abstractions
 {
@@ -13,11 +11,8 @@ namespace StoreControl.Application.IntegrationTests.Abstractions
         protected BaseIntegrationTest(IntegrationTestWebAppFactory factory)
         {
             _serviceScope = factory.Services.CreateScope();
-            
-            var dbContext = _serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            InitializeDatabase(dbContext);
 
-            DbContext = dbContext;
+            DbContext = _serviceScope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
             Mediator = _serviceScope.ServiceProvider.GetRequiredService<IMediator>();
         }
 
@@ -27,11 +22,6 @@ namespace StoreControl.Application.IntegrationTests.Abstractions
         public void Dispose()
         {
             _serviceScope.Dispose();
-        }
-
-        private static void InitializeDatabase(ApplicationDbContext dbContext)
-        {
-            dbContext.Database.Migrate();
         }
     }
 }
