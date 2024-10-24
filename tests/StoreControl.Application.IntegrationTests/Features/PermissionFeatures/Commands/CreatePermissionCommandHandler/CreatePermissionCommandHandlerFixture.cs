@@ -13,7 +13,7 @@ namespace StoreControl.Application.IntegrationTests.Features.PermissionFeatures.
                 Name = "ExistingPermission",
             });
 
-            DbContext.SaveChangesAsync();
+            DbContext.SaveChanges();
         }
     }
 }

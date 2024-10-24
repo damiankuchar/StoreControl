@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Npgsql;
+using Respawn;
 using StoreControl.Infrastructure.Persistence;
+using System.Data.Common;
 using Testcontainers.PostgreSql;
 
 namespace StoreControl.Application.IntegrationTests.Abstractions
@@ -17,6 +20,9 @@ namespace StoreControl.Application.IntegrationTests.Abstractions
             .WithUsername("postgres")
             .WithPassword("postgres")
             .Build();
+
+        private DbConnection _dbConnection = null!;
+        private Respawner _respawner = null!;
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
@@ -37,14 +43,38 @@ namespace StoreControl.Application.IntegrationTests.Abstractions
             });
         }
 
-        public Task InitializeAsync()
+        public async Task InitializeAsync()
         {
-            return _dbContainer.StartAsync();
+            await _dbContainer.StartAsync();
+
+            _dbConnection = new NpgsqlConnection(_dbContainer.GetConnectionString());
+
+            await _dbConnection.OpenAsync();
+
+            // Ensure that application is started
+            CreateClient();
+
+            await InitializeRespawnerAsync();
         }
 
-        Task IAsyncLifetime.DisposeAsync()
+        public new async Task DisposeAsync()
         {
-            return _dbContainer.StopAsync();
+            await _dbContainer.StopAsync();
+            await _dbConnection.DisposeAsync();
+        }
+
+        public async Task ResetDatabaseAsync()
+        {
+            await _respawner.ResetAsync(_dbConnection);
+        }
+
+        private async Task InitializeRespawnerAsync()
+        {
+            _respawner = await Respawner.CreateAsync(_dbConnection, new RespawnerOptions
+            {
+                SchemasToInclude = ["public"],
+                DbAdapter = DbAdapter.Postgres
+            });
         }
     }
 }
