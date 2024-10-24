@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using StoreControl.Application.Interfaces;
 using StoreControl.Application.Shared.Services.PermissionService;
 using StoreControl.Domain.Entities;

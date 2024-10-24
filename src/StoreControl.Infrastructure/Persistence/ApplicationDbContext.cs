@@ -36,7 +36,7 @@ namespace StoreControl.Infrastructure.Persistence
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var entries = ChangeTracker.Entries<IAuditableEntity>();
+            var entries = ChangeTracker.Entries<BaseAuditableEntity>();
             var claims = _userClaimsService.GetUserClaims();
 
             var userName = claims.TryGetValue(CustomClaims.FullName, out var name) ? name : "Unknown";

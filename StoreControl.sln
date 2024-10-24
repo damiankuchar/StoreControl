@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreControl.WebAPI", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StoreControl.Application", "src\StoreControl.Application\StoreControl.Application.csproj", "{B1573C5C-ADFB-4A18-BB16-F7D5EAD0A4D6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{EDD388F9-32A0-4B60-8D04-EE5FA1442D8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreControl.Application.IntegrationTests", "tests\StoreControl.Application.IntegrationTests\StoreControl.Application.IntegrationTests.csproj", "{49C566C9-6DC5-4E6A-993D-987A01BD5EA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +45,10 @@ Global
 		{B1573C5C-ADFB-4A18-BB16-F7D5EAD0A4D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1573C5C-ADFB-4A18-BB16-F7D5EAD0A4D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1573C5C-ADFB-4A18-BB16-F7D5EAD0A4D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49C566C9-6DC5-4E6A-993D-987A01BD5EA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49C566C9-6DC5-4E6A-993D-987A01BD5EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49C566C9-6DC5-4E6A-993D-987A01BD5EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49C566C9-6DC5-4E6A-993D-987A01BD5EA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +58,7 @@ Global
 		{B1C31987-5AAD-4FBC-8BCB-FDC07B1DB71B} = {9BA8BC7B-05DB-4294-AFB7-C0D7ADFE523D}
 		{0D6594EE-DF1F-4864-91FB-272CC4359E2B} = {9BA8BC7B-05DB-4294-AFB7-C0D7ADFE523D}
 		{B1573C5C-ADFB-4A18-BB16-F7D5EAD0A4D6} = {9BA8BC7B-05DB-4294-AFB7-C0D7ADFE523D}
+		{49C566C9-6DC5-4E6A-993D-987A01BD5EA0} = {EDD388F9-32A0-4B60-8D04-EE5FA1442D8E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B21CD70B-FFF8-47B1-B709-305450ADAB07}

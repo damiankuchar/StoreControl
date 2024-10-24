@@ -16,9 +16,9 @@ namespace StoreControl.Application.Shared.Services.PermissionService
         public async Task<bool> IsPermissionUniqueAsync(Permission permission, CancellationToken cancellationToken)
         {
             var isPermissionUnique = await _dbContext.Permissions
-                .AnyAsync(x => x.Name !=  permission.Name, cancellationToken);
+                .AnyAsync(x => x.Name ==  permission.Name, cancellationToken);
 
-            return isPermissionUnique;
+            return !isPermissionUnique;
         }
     }
 }
