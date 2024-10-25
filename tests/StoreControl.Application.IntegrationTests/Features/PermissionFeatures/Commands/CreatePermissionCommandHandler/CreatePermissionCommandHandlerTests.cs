@@ -6,6 +6,7 @@ using StoreControl.Domain.Exceptions;
 
 namespace StoreControl.Application.IntegrationTests.Features.PermissionFeatures.Commands.CreatePermissionCommandHandler
 {
+    [Collection(nameof(IntegrationTestCollection))]
     public class CreatePermissionCommandHandlerTests : CreatePermissionCommandHandlerFixture
     {
         public CreatePermissionCommandHandlerTests(IntegrationTestWebAppFactory factory)

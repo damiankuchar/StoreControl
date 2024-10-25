@@ -3,6 +3,7 @@ using StoreControl.Domain.Entities;
 
 namespace StoreControl.Application.IntegrationTests.Features.PermissionFeatures.Commands.CreatePermissionCommandHandler
 {
+    [Collection(nameof(IntegrationTestCollection))]
     public class CreatePermissionCommandHandlerFixture : BaseIntegrationTest
     {
         public CreatePermissionCommandHandlerFixture(IntegrationTestWebAppFactory factory)

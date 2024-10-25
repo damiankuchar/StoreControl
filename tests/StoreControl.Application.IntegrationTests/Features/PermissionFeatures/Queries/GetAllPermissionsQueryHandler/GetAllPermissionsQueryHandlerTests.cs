@@ -4,6 +4,7 @@ using StoreControl.Application.IntegrationTests.Abstractions;
 
 namespace StoreControl.Application.IntegrationTests.Features.PermissionFeatures.Queries.GetAllPermissionsQueryHandler
 {
+    [Collection(nameof(IntegrationTestCollection))]
     public class GetAllPermissionsQueryHandlerTests : GetAllPermissionsQueryHandlerFixture
     {
         public GetAllPermissionsQueryHandlerTests(IntegrationTestWebAppFactory factory)
@@ -16,7 +17,7 @@ namespace StoreControl.Application.IntegrationTests.Features.PermissionFeatures.
         {
             // Arrange
             var query = new GetAllPermisionsQuery();
-            await SeedDatabase();
+            await SeedDatabaseAsync();
 
             // Act
             var result = await Mediator.Send(query);

@@ -4,10 +4,14 @@ using StoreControl.Infrastructure.Persistence;
 
 namespace StoreControl.Application.IntegrationTests.Abstractions
 {
-    public abstract class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>, IAsyncLifetime
+    [Collection(nameof(IntegrationTestCollection))]
+    public abstract class BaseIntegrationTest : IAsyncLifetime
     {
         private readonly IServiceScope _serviceScope;
         private readonly IntegrationTestWebAppFactory _factory;
+
+        protected ApplicationDbContext DbContext { get; }
+        protected IMediator Mediator { get; }
 
         protected BaseIntegrationTest(IntegrationTestWebAppFactory factory)
         {
@@ -16,14 +20,6 @@ namespace StoreControl.Application.IntegrationTests.Abstractions
 
             DbContext = _serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             Mediator = _serviceScope.ServiceProvider.GetRequiredService<IMediator>();
-        }
-
-        protected ApplicationDbContext DbContext { get; }
-        protected IMediator Mediator { get; }
-
-        public void Dispose()
-        {
-            _serviceScope.Dispose();
         }
 
         public async Task DisposeAsync()

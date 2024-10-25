@@ -3,6 +3,7 @@ using StoreControl.Domain.Entities;
 
 namespace StoreControl.Application.IntegrationTests.Features.PermissionFeatures.Queries.GetAllPermissionsQueryHandler
 {
+    [Collection(nameof(IntegrationTestCollection))]
     public class GetAllPermissionsQueryHandlerFixture : BaseIntegrationTest
     {
         public GetAllPermissionsQueryHandlerFixture(IntegrationTestWebAppFactory factory)
@@ -10,7 +11,7 @@ namespace StoreControl.Application.IntegrationTests.Features.PermissionFeatures.
         {
         }
 
-        protected async Task SeedDatabase()
+        protected async Task SeedDatabaseAsync()
         {
             var permissions = new List<Permission>()
             {
