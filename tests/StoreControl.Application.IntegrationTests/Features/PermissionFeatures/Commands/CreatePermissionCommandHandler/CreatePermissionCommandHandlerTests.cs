@@ -42,6 +42,8 @@ namespace StoreControl.Application.IntegrationTests.Features.PermissionFeatures.
                 Name = "ExistingPermission"
             };
 
+            await SeedDatabaseAsync();
+
             // Act
             var action = () => Mediator.Send(command);
 

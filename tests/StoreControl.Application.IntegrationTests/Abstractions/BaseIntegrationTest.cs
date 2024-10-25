@@ -22,15 +22,17 @@ namespace StoreControl.Application.IntegrationTests.Abstractions
             Mediator = _serviceScope.ServiceProvider.GetRequiredService<IMediator>();
         }
 
+        public Task InitializeAsync()
+        {
+            return Task.CompletedTask;
+        }
+
         public async Task DisposeAsync()
         {
             _serviceScope.Dispose();
             await _factory.ResetDatabaseAsync();
         }
 
-        public Task InitializeAsync()
-        {
-            return Task.CompletedTask;
-        }
+        protected virtual Task SeedDatabaseAsync() => Task.CompletedTask;
     }
 }

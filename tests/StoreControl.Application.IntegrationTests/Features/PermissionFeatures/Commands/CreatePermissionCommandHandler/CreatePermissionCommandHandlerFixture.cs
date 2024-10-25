@@ -9,12 +9,20 @@ namespace StoreControl.Application.IntegrationTests.Features.PermissionFeatures.
         public CreatePermissionCommandHandlerFixture(IntegrationTestWebAppFactory factory)
             : base(factory)
         {
-            DbContext.Permissions.Add(new Permission
-            {
-                Name = "ExistingPermission",
-            });
+        }
 
-            DbContext.SaveChanges();
+        protected override async Task SeedDatabaseAsync()
+        {
+            var permissions = new List<Permission>
+            {
+                new()
+                {
+                    Name = "ExistingPermission",
+                },
+            };
+
+            await DbContext.AddRangeAsync(permissions);
+            await DbContext.SaveChangesAsync();
         }
     }
 }

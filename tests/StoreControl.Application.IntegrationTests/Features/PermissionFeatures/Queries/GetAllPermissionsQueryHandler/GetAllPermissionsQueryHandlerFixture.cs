@@ -11,7 +11,7 @@ namespace StoreControl.Application.IntegrationTests.Features.PermissionFeatures.
         {
         }
 
-        protected async Task SeedDatabaseAsync()
+        protected override async Task SeedDatabaseAsync()
         {
             var permissions = new List<Permission>()
             {
