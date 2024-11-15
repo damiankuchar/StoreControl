@@ -36,13 +36,6 @@ namespace StoreControl.Application.Features.RolesFeatures.Commands.UpdateRole
 
                 _mapper.Map(request, role);
 
-                var isRoleUnique = await _roleService.IsRoleUniqueAsync(role, cancellationToken);
-
-                if (!isRoleUnique)
-                {
-                    throw new BadRequestException("Role with provided name already exists.");
-                }
-
                 var permissions = await _dbContext.Permissions
                     .Where(x => request.PermissionIds.Contains(x.Id))
                     .ToListAsync();

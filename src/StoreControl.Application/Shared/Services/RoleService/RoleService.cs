@@ -16,9 +16,9 @@ namespace StoreControl.Application.Shared.Services.RoleService
         public async Task<bool> IsRoleUniqueAsync(Role role, CancellationToken cancellationToken)
         {
             var isRoleUnique = await _dbContext.Roles
-                .AnyAsync(x => x.Name != role.Name, cancellationToken);
+                .AnyAsync(x => x.Name == role.Name, cancellationToken);
 
-            return isRoleUnique;
+            return !isRoleUnique;
         }
     }
 }

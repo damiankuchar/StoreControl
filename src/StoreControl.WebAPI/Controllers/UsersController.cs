@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using StoreControl.Application.Features.UsersFeatures;
 using StoreControl.Application.Features.UsersFeatures.Commands.CreateUser;
 using StoreControl.Application.Features.UsersFeatures.Commands.DeleteUser;
+using StoreControl.Application.Features.UsersFeatures.Commands.UpdateUser;
 using StoreControl.Application.Features.UsersFeatures.Queries.GetAllUsers;
 using StoreControl.Application.Features.UsersFeatures.Queries.GetUserById;
 
@@ -45,6 +46,17 @@ namespace StoreControl.WebAPI.Controllers
             var response = await _mediator.Send(command, cancellationToken);
 
             return CreatedAtAction(nameof(GetUserById), new { id = response.Id }, response);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(UserDetailedDto), 200)]
+        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserCommand command, CancellationToken cancellationToken)
+        {
+            command.Id = id;
+
+            var response = await _mediator.Send(command, cancellationToken);
+
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]

@@ -16,9 +16,9 @@ namespace StoreControl.Application.Shared.Services.UserService
         public async Task<bool> IsUserUniqueAsync(User user, CancellationToken cancellationToken)
         {
             var isUserUnique = await _dbContext.Users
-                .AnyAsync(x => x.Username != user.Username && x.Email != user.Email, cancellationToken);
+                .AnyAsync(x => x.Username == user.Username || x.Email == user.Email, cancellationToken);
 
-            return isUserUnique;
+            return !isUserUnique;
         }
     }
 }
