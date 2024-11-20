@@ -11,6 +11,7 @@ namespace StoreControl.Infrastructure.Persistence.Configurations
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Name).IsRequired().HasMaxLength(256);
+            builder.Property(x => x.Description).IsRequired().HasMaxLength(1024);
 
             builder.Property(x => x.CreatedBy).IsRequired();
             builder.Property(x => x.CreatedOn).IsRequired();
