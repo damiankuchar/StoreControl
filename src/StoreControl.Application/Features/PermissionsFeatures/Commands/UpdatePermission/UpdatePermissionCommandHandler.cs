@@ -36,13 +36,6 @@ namespace StoreControl.Application.Features.PermissionsFeatures.Commands.UpdateP
 
                 _mapper.Map(request, permission);
 
-                var isPermissionUnique = await _permissionService.IsPermissionUniqueAsync(permission, cancellationToken);
-
-                if (!isPermissionUnique)
-                {
-                    throw new BadRequestException("Permission with provided name already exists.");
-                }
-
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
                 await transaction.CommitAsync(cancellationToken);

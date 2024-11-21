@@ -6,6 +6,7 @@ using StoreControl.Application.Features.PermissionsFeatures.Commands.DeletePermi
 using StoreControl.Application.Features.PermissionsFeatures.Commands.UpdatePermission;
 using StoreControl.Application.Features.PermissionsFeatures.Queries.GetAllPermisions;
 using StoreControl.Application.Features.PermissionsFeatures.Queries.GetPermissionById;
+using StoreControl.Infrastructure.Authentication;
 
 namespace StoreControl.WebAPI.Controllers
 {
@@ -18,6 +19,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpGet]
+        [HasPermission("Read_All_Permissions")]
         [ProducesResponseType(typeof(IEnumerable<PermissionDto>), 200)]
         public async Task<IActionResult> GetAllPermisions(CancellationToken cancellationToken)
         {
@@ -29,6 +31,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [HasPermission("Read_Permission")]
         [ProducesResponseType(typeof(PermissionDto), 200)]
         public async Task<IActionResult> GetPermissionById(Guid id, CancellationToken cancellationToken)
         {
@@ -40,6 +43,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpPost]
+        [HasPermission("Create_Permission")]
         [ProducesResponseType(typeof(PermissionDto), 201)]
         public async Task<IActionResult> CreatePermission([FromBody] CreatePermissionCommand command, CancellationToken cancellationToken)
         {
@@ -49,6 +53,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [HasPermission("Update_Permission")]
         [ProducesResponseType(typeof(PermissionDto), 200)]
         public async Task<IActionResult> UpdatePermission(Guid id, [FromBody] UpdatePermissionCommand command, CancellationToken cancellationToken)
         {
@@ -60,6 +65,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [HasPermission("Delete_Permission")]
         [ProducesResponseType(204)]
         public async Task<IActionResult> DeletePermission(Guid id, CancellationToken cancellationToken)
         {

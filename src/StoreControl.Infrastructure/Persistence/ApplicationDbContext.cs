@@ -9,9 +9,9 @@ namespace StoreControl.Infrastructure.Persistence
 {
     public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
-        public virtual DbSet<Permission> Permissions { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Permission> Permissions { get; set; } = null!;
+        public virtual DbSet<Role> Roles { get; set; } = null!;
+        public virtual DbSet<User> Users { get; set; } = null!;
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IUserClaimsService userClaimsService)

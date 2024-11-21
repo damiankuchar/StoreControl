@@ -21,6 +21,7 @@ namespace StoreControl.WebAPI
         {
             services.ConfigureOptions<JwtOptionsSetup>();
             services.ConfigureOptions<JwtBearerOptionsSetup>();
+            services.ConfigureOptions<AuthorizationSettingsOptionsSetup>();
 
             return services;
         }

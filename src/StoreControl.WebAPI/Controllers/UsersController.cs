@@ -6,6 +6,7 @@ using StoreControl.Application.Features.UsersFeatures.Commands.DeleteUser;
 using StoreControl.Application.Features.UsersFeatures.Commands.UpdateUser;
 using StoreControl.Application.Features.UsersFeatures.Queries.GetAllUsers;
 using StoreControl.Application.Features.UsersFeatures.Queries.GetUserById;
+using StoreControl.Infrastructure.Authentication;
 
 namespace StoreControl.WebAPI.Controllers
 {
@@ -18,6 +19,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpGet]
+        [HasPermission("Read_All_Users")]
         [ProducesResponseType(typeof(IEnumerable<UserDto>), 200)]
         public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
         {
@@ -29,6 +31,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [HasPermission("Read_User")]
         [ProducesResponseType(typeof(UserDetailedDto), 200)]
         public async Task<IActionResult> GetUserById(Guid id, CancellationToken cancellationToken)
         {
@@ -40,6 +43,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpPost]
+        [HasPermission("Create_User")]
         [ProducesResponseType(typeof(UserDetailedDto), 201)]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command, CancellationToken cancellationToken)
         {
@@ -49,6 +53,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [HasPermission("Update_Permission")]
         [ProducesResponseType(typeof(UserDetailedDto), 200)]
         public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserCommand command, CancellationToken cancellationToken)
         {
@@ -60,6 +65,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [HasPermission("Delete_Permission")]
         [ProducesResponseType(204)]
         public async Task<IActionResult> DeleteUser(Guid id, CancellationToken cancellationToken)
         {

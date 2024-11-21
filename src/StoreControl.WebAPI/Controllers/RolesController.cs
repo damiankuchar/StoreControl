@@ -6,6 +6,7 @@ using StoreControl.Application.Features.RolesFeatures.Commands.DeleteRole;
 using StoreControl.Application.Features.RolesFeatures.Commands.UpdateRole;
 using StoreControl.Application.Features.RolesFeatures.Queries.GetAllRoles;
 using StoreControl.Application.Features.RolesFeatures.Queries.GetRoleById;
+using StoreControl.Infrastructure.Authentication;
 
 namespace StoreControl.WebAPI.Controllers
 {
@@ -18,6 +19,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpGet]
+        [HasPermission("Read_All_Roles")]
         [ProducesResponseType(typeof(IEnumerable<RoleDto>), 200)]
         public async Task<IActionResult> GetAllRoles(CancellationToken cancellationToken)
         {
@@ -29,6 +31,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [HasPermission("Read_Role")]
         [ProducesResponseType(typeof(RoleDetailedDto), 200)]
         public async Task<IActionResult> GetRoleById(Guid id, CancellationToken cancellationToken)
         {
@@ -40,6 +43,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpPost]
+        [HasPermission("Create_Role")]
         [ProducesResponseType(typeof(RoleDetailedDto), 201)]
         public async Task<IActionResult> CreateRole([FromBody] CreateRoleCommand command, CancellationToken cancellationToken)
         {
@@ -49,6 +53,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [HasPermission("Update_Role")]
         [ProducesResponseType(typeof(RoleDetailedDto), 200)]
         public async Task<IActionResult> UpdateRole(Guid id, [FromBody] UpdateRoleCommand command, CancellationToken cancellationToken)
         {
@@ -60,6 +65,7 @@ namespace StoreControl.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [HasPermission("Delete_Role")]
         [ProducesResponseType(204)]
         public async Task<IActionResult> DeleteRole(Guid id, CancellationToken cancellationToken)
         {
