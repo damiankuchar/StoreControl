@@ -7,7 +7,7 @@ namespace StoreControl.Application.Features.UsersFeatures.Queries.GetAllUsers
 {
     public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, IEnumerable<UserDto>>
     {
-        public readonly IApplicationDbContext _dbContext;
+        private readonly IApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
 
         public GetAllUsersQueryHandler(IApplicationDbContext dbContext, IMapper mapper)

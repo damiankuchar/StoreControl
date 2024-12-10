@@ -10,7 +10,7 @@ using StoreControl.Infrastructure.Authentication;
 
 namespace StoreControl.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/permissions")]
     [ApiController]
     public class PermissionsController : ApiController
     {

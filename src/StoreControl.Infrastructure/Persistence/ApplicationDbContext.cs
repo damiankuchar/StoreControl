@@ -12,6 +12,7 @@ namespace StoreControl.Infrastructure.Persistence
         public virtual DbSet<Permission> Permissions { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
+        public virtual DbSet<ProductionLine> ProductionLines { get; set; } = null!;
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IUserClaimsService userClaimsService)

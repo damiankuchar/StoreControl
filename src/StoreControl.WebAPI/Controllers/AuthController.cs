@@ -7,7 +7,7 @@ using StoreControl.Application.Features.AuthFeatures.Commands.Register;
 
 namespace StoreControl.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ApiController
     {
